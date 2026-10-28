@@ -1,0 +1,1 @@
+# 2026-4e-petricek-trainer-hub
