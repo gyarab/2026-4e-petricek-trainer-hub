@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Cviky{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Cviky</h1>
+    <a class="button" href="{% url 'exercise_create' %}">Nový cvik</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Název</th><th>Kategorie</th><th>Svalová skupina</th><th>Sledování</th><th></th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for e in exercises %}
+        <tr>
+            <td>{{ e.name }}</td>
+            <td>{{ e.get_category_display }}</td>
+            <td>{{ e.muscle_group }}</td>
+            <td>{{ e.get_tracking_type_display }}</td>
+            <td>
+                {% if e.created_by_id == user.id %}
+                    <a href="{% url 'exercise_edit' e.pk %}">Upravit</a>
+                {% else %}
+                    <span class="muted">sdílený</span>
+                {% endif %}
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="5">Zatím zde nejsou žádné cviky.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

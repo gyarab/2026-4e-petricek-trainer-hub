@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Klienti{% endblock %}
+{% block content %}
+<h1>Moji klienti</h1>
+<ul class="card">
+    {% for profile in clients %}
+        <li>{{ profile.user }}</li>
+    {% empty %}
+        <li>Zatím nemáte žádné klienty.</li>
+    {% endfor %}
+</ul>
+{% endblock %}
