@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Přidat cvik{% endblock %}
+{% block content %}
+<h1>Přidat cvik</h1>
+<p class="muted">Plán: {{ day.plan.name }}, den: {{ day.name }}</p>
+
+<form method="post" class="card">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p class="muted">Vyplňte pole podle typu cviku: činky (série, opakování, hmotnost),
+    vlastní váha nebo volitelná zátěž (série, opakování, hmotnost jen když je přidaná),
+    nebo čas (sekundy).</p>
+    <button type="submit" class="button">Přidat</button>
+    <a href="{% url 'plan_detail' day.plan_id %}">Zrušit</a>
+</form>
+{% endblock %}

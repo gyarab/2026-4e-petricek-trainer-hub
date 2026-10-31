@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -7,11 +8,16 @@ from .forms import ExerciseForm
 from .models import Exercise
 
 
-@trainer_required
+@login_required
 def exercise_list(request):
-    exercises = Exercise.objects.filter(
-        Q(created_by__isnull=True) | Q(created_by=request.user)
-    )
+    if request.user.is_trainer:
+        condition = Q(created_by__isnull=True) | Q(created_by=request.user)
+    else:
+        condition = Q(created_by__isnull=True)
+        trainer_id = request.user.client_profile.trainer_id
+        if trainer_id:
+            condition |= Q(created_by_id=trainer_id)
+    exercises = Exercise.objects.filter(condition)
     return render(request, "exercises/list.html", {"exercises": exercises})
 
 

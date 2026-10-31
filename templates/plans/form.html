@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Nový plán{% endblock %}
+{% block content %}
+<h1>Nový plán</h1>
+
+{% if no_clients %}
+    <p>Nemáte žádné klienty, kterým by šlo plán přiřadit. Nejdřív je
+    <a href="{% url 'client_add' %}">přidejte</a>. Pokud chcete plán pro sebe,
+    přidejte mezi klienty sami sebe (své uživatelské jméno).</p>
+{% else %}
+    <form method="post" class="card">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="button">Vytvořit plán</button>
+        <a href="{% url 'plan_list' %}">Zrušit</a>
+    </form>
+{% endif %}
+{% endblock %}

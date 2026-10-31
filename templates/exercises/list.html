@@ -3,12 +3,16 @@
 {% block content %}
 <div class="page-header">
     <h1>Cviky</h1>
-    <a class="button" href="{% url 'exercise_create' %}">Nový cvik</a>
+    {% if user.is_trainer %}
+        <a class="button" href="{% url 'exercise_create' %}">Nový cvik</a>
+    {% endif %}
 </div>
 <table class="table">
     <thead>
         <tr>
-            <th>Název</th><th>Kategorie</th><th>Svalová skupina</th><th>Sledování</th><th></th>
+            <th>Název</th><th>Kategorie</th><th>Svalová skupina</th><th>Evidence</th>
+            <th>Návod</th>
+            {% if user.is_trainer %}<th></th>{% endif %}
         </tr>
     </thead>
     <tbody>
@@ -18,16 +22,19 @@
             <td>{{ e.get_category_display }}</td>
             <td>{{ e.muscle_group }}</td>
             <td>{{ e.get_tracking_type_display }}</td>
-            <td>
-                {% if e.created_by_id == user.id %}
-                    <a href="{% url 'exercise_edit' e.pk %}">Upravit</a>
-                {% else %}
-                    <span class="muted">sdílený</span>
-                {% endif %}
-            </td>
+            <td>{% include "exercises/_video_button.html" with exercise=e %}</td>
+            {% if user.is_trainer %}
+                <td>
+                    {% if e.created_by_id == user.id %}
+                        <a href="{% url 'exercise_edit' e.pk %}">Upravit</a>
+                    {% else %}
+                        <span class="muted">společný</span>
+                    {% endif %}
+                </td>
+            {% endif %}
         </tr>
     {% empty %}
-        <tr><td colspan="5">Zatím zde nejsou žádné cviky.</td></tr>
+        <tr><td colspan="6">Zatím nejsou žádné cviky.</td></tr>
     {% endfor %}
     </tbody>
 </table>

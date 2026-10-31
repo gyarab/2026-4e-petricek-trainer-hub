@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Můj plán{% endblock %}
+{% block content %}
+<h1>Můj plán</h1>
+
+{% for plan in plans %}
+    <div class="page-header">
+        <div>
+            <h2>{{ plan.name }}</h2>
+            <p class="muted">
+                Trenér: {{ plan.trainer }}
+                {% if plan.start_date %} | začátek: {{ plan.start_date|date:"j. n. Y" }}{% endif %}
+            </p>
+        </div>
+    </div>
+
+    {% for day in plan.days.all %}
+        <div class="day-card">
+            <h3>{{ day.name }}</h3>
+            {% if day.items.all %}
+                <table class="table">
+                    <thead>
+                        <tr><th>Cvik</th><th>Série</th><th>Opak.</th><th>Kg</th><th>Čas (s)</th><th>Poznámka</th></tr>
+                    </thead>
+                    <tbody>
+                    {% for item in day.items.all %}
+                        <tr>
+                            <td>{{ item.exercise.name }} {% include "exercises/_video_button.html" with exercise=item.exercise %}</td>
+                            <td>{{ item.target_sets|default:"-" }}</td>
+                            <td>{{ item.target_reps|default:"-" }}</td>
+                            <td>{% if item.target_weight != None %}{{ item.target_weight|floatformat:"-2" }}{% else %}-{% endif %}</td>
+                            <td>{{ item.target_seconds|default:"-" }}</td>
+                            <td>{{ item.note }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="muted">V tomto dni zatím nejsou žádné cviky.</p>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p class="muted">Plán zatím nemá žádné dny.</p>
+    {% endfor %}
+{% empty %}
+    <div class="card">
+        {% if profile.trainer %}
+            <p>Zatím nemáš žádný aktivní plán. Požádej trenéra ({{ profile.trainer }}), aby ti nějaký vytvořil.</p>
+        {% else %}
+            <p>Zatím nemáš žádného trenéra ani plán.</p>
+        {% endif %}
+    </div>
+{% endfor %}
+{% endblock %}

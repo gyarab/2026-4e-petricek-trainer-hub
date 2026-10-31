@@ -1,0 +1,5 @@
+{% if exercise.video_embed_url %}
+    <button type="button" class="button button-small"
+            data-video="{{ exercise.video_embed_url }}"
+            data-title="{{ exercise.name }}">Návod</button>
+{% endif %}

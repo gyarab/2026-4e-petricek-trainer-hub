@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Přidat klienta{% endblock %}
+{% block content %}
+<h1>Přidat klienta</h1>
+<form method="post" class="card">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="button">Přidat</button>
+    <a href="{% url 'clients' %}">Zrušit</a>
+</form>
+{% endblock %}

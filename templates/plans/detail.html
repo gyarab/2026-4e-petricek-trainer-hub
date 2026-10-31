@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ plan.name }}{% endblock %}
+{% block content %}
+<div class="page-header">
+    <div>
+        <h1>{{ plan.name }}</h1>
+        <p class="muted">Klient: {{ plan.client.user }}</p>
+    </div>
+    <a href="{% url 'plan_list' %}">Zpět na plány</a>
+</div>
+
+{% for day in days %}
+    <div class="day-card">
+        <h3>
+            <span>{{ day.name }}</span>
+            <a class="button" href="{% url 'plan_exercise_add' day.pk %}">Přidat cvik</a>
+        </h3>
+        {% if day.items.all %}
+            <table class="table">
+                <thead>
+                    <tr><th>Cvik</th><th>Série</th><th>Opak.</th><th>Kg</th><th>Čas (s)</th><th>Poznámka</th><th></th></tr>
+                </thead>
+                <tbody>
+                {% for item in day.items.all %}
+                    <tr>
+                        <td>{{ item.exercise.name }} {% include "exercises/_video_button.html" with exercise=item.exercise %}</td>
+                        <td>{{ item.target_sets|default:"-" }}</td>
+                        <td>{{ item.target_reps|default:"-" }}</td>
+                        <td>{% if item.target_weight != None %}{{ item.target_weight|floatformat:"-2" }}{% else %}-{% endif %}</td>
+                        <td>{{ item.target_seconds|default:"-" }}</td>
+                        <td>{{ item.note }}</td>
+                        <td>
+                            <form method="post" action="{% url 'plan_exercise_delete' item.pk %}" class="inline-form">
+                                {% csrf_token %}
+                                <button type="submit" class="link-button">Smazat</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="muted">V tomto dni zatím nejsou žádné cviky.</p>
+        {% endif %}
+    </div>
+{% empty %}
+    <p class="muted">Plán zatím nemá žádné dny. Přidejte první níže.</p>
+{% endfor %}
+
+<form method="post" class="card">
+    <h3>Přidat den</h3>
+    {% csrf_token %}
+    {{ day_form.as_p }}
+    <button type="submit" class="button">Přidat den</button>
+</form>
+{% endblock %}

@@ -1,8 +1,54 @@
 {% extends "base.html" %}
+{% block title %}TrainerHub{% endblock %}
 {% block content %}
-<h1>Vítejte, {{ user }}</h1>
-{% if user.is_trainer %}
-    <p>Jste trenér. Máte {{ user.clients.count }} klientů.</p>
+
+{% if user.is_authenticated %}
+    <section class="hero hero-small">
+        <div class="hero-content">
+            <p class="eyebrow">Přihlášen</p>
+            <h1>Vítejte,<br>{{ user }}</h1>
+        </div>
+    </section>
+
+    <div class="button-grid">
+        <a class="big-button" href="{% url 'exercise_list' %}">Cviky</a>
+        {% if user.is_trainer %}
+            <a class="big-button" href="{% url 'clients' %}">Klienti</a>
+            <a class="big-button" href="{% url 'plan_list' %}">Moje plány</a>
+        {% endif %}
+        <a class="big-button" href="{% url 'my_plan' %}">Můj plán</a>
+    </div>
+
+{% else %}
+    <section class="hero">
+        <div class="hero-content">
+            <p class="eyebrow">TrainerHub / plány a progres</p>
+            <h1>Trénuj chytře.<br>Sleduj progres.</h1>
+            <p class="hero-text">
+                Trenér sestaví plán, klient zapisuje výkony a aplikace
+                z nich spočítá rekordy i předpověď dalšího vývoje.
+            </p>
+            <div class="hero-actions">
+                <a class="button" href="{% url 'register' %}">Vytvořit účet</a>
+                <a class="button button-outline" href="{% url 'login' %}">Přihlásit se</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="feature">
+            <h3>Plány na míru</h3>
+            <p>Trenér vytvoří dny a cviky se sériemi, opakováními, váhou nebo časem.</p>
+        </div>
+        <div class="feature">
+            <h3>Videonávody</h3>
+            <p>U každého cviku je tlačítko Návod s ukázkou správného provedení.</p>
+        </div>
+        <div class="feature">
+            <h3>Statistiky a předpověď</h3>
+            <p>Osobní rekordy, grafy vývoje a simulátor dalších týdnů. Připravujeme.</p>
+        </div>
+    </section>
 {% endif %}
-<p>Váš tréninkový profil: {{ user.client_profile }}</p>
+
 {% endblock %}
