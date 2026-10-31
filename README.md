@@ -17,6 +17,4 @@ python manage.py runserver
 
 Administrace: http://127.0.0.1:8000/admin/
 
-Trenéři mohou spravovat vlastní cviky a používat sdílené cviky na stránce
-`/exercises/`. Sdílené cviky lze vytvořit v administraci bez vyplnění pole
-„created by“.
+
